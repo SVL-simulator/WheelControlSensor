@@ -40,9 +40,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7434510128226475349}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fefe8afd050c8bc4981c4b24cd75e1e8, type: 3}
+  m_Script: {fileID: 11500000, guid: bcc94fec597fe72408a8462869f20f1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Name: 
   Topic: 
   Frame: 
+  ParentTransform: {fileID: 0}
