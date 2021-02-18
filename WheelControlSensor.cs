@@ -24,11 +24,11 @@ namespace Simulator.Sensors
         private float brake = 0f;
 
         [AnalysisMeasurement(MeasurementType.Input)]
-        private float MaxSteer = 0f;
+        public float MaxSteer = 0f;
         [AnalysisMeasurement(MeasurementType.Input)]
-        private float MaxAccel = 0f;
+        public float MaxAccel = 0f;
         [AnalysisMeasurement(MeasurementType.Input)]
-        private float MaxBrake = 0f;
+        public float MaxBrake = 0f;
 
         private SimulatorControls controls;
         private IVehicleDynamics dynamics;
