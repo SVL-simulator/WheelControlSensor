@@ -1,7 +1,7 @@
 {
   "name": "Wheel Control Sensor",
   "accessType": "public",
-  "description": "Example of a sensor to configure wheel control on EGO vehicle.",
+  "description": "This sensor is required for a vehicle to accept Logitech G920 wheel control commands. Parameters are not required.",
   "licenseName": "LG Content",
   "copyright": "LG Electronics Inc.",
   "tags": [
