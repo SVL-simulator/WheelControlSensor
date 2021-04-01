@@ -82,7 +82,8 @@ namespace Simulator.Sensors
                 case OperatingSystemFamily.MacOSX:
                     break;
                 case OperatingSystemFamily.Windows:
-                    accel = Mathf.InverseLerp(1f, -1f, obj.ReadValue<float>());
+                    //accel = Mathf.InverseLerp(1f, -1f, obj.ReadValue<float>());
+                    accel = Mathf.InverseLerp(-1f, 1f, obj.ReadValue<float>());
                     break;
                 case OperatingSystemFamily.Linux:
                     accel = Mathf.InverseLerp(-1f, 1f, obj.ReadValue<float>());
