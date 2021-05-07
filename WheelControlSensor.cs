@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019-2020 LG Electronics, Inc.
+ * Copyright (c) 2019-2021 LG Electronics, Inc.
  *
  * This software contains code licensed as described in LICENSE.
  *
@@ -30,10 +30,10 @@ namespace Simulator.Sensors
         [AnalysisMeasurement(MeasurementType.Input)]
         public float MaxBrake = 0f;
 
-        private SimulatorControls controls;
-        private IVehicleDynamics dynamics;
-        private VehicleActions actions;
-        private AgentController AgentController;
+        private SimulatorControls Controls;
+        private IVehicleDynamics Dynamics;
+        private VehicleActions Actions;
+        private IAgentController Controller;
 
         private OperatingSystemFamily operatingSystemFamily;
 
@@ -44,33 +44,32 @@ namespace Simulator.Sensors
 
         private void Start()
         {
-            AgentController = GetComponentInParent<AgentController>();
+            Controller = GetComponentInParent<IAgentController>();
+            Dynamics = GetComponentInParent<IVehicleDynamics>();
+            Actions = GetComponentInParent<VehicleActions>();
 
-            dynamics = GetComponentInParent<IVehicleDynamics>();
-            actions = GetComponentInParent<VehicleActions>();
-
-            Debug.Assert(dynamics != null);
-            Debug.Assert(actions != null);
+            Debug.Assert(Dynamics != null);
+            Debug.Assert(Actions != null);
             Debug.Assert(SimulatorManager.Instance != null);
 
-            controls = SimulatorManager.Instance.controls;
-            controls.VehicleWheel.Accel.performed += AccelPerformed;
-            controls.VehicleWheel.Accel.canceled += AccelCanceled;
-            controls.VehicleWheel.Brake.performed += BrakePerformed;
-            controls.VehicleWheel.Brake.canceled += BrakeCanceled;
-            controls.VehicleWheel.Steer.performed += SteerPerformed;
-            controls.VehicleWheel.ButtonA.performed += ButtonA;
-            controls.VehicleWheel.ButtonB.performed += ButtonB;
-            controls.VehicleWheel.ButtonX.performed += ButtonX;
-            controls.VehicleWheel.ButtonY.performed += ButtonY;
-            controls.VehicleWheel.ButtonRB.performed += ButtonRB;
-            controls.VehicleWheel.ButtonLB.performed += ButtonLB;
-            controls.VehicleWheel.ButtonSelect.performed += ButtonSelect;
-            controls.VehicleWheel.ButtonStart.performed += ButtonStart;
-            controls.VehicleWheel.ButtonRSB.performed += ButtonRSB;
-            controls.VehicleWheel.ButtonLSB.performed += ButtonLSB;
-            controls.VehicleWheel.ButtonCenter.performed += ButtonCenter;
-            controls.VehicleWheel.DPad.performed += DPad;
+            Controls = SimulatorManager.Instance.controls;
+            Controls.VehicleWheel.Accel.performed += AccelPerformed;
+            Controls.VehicleWheel.Accel.canceled += AccelCanceled;
+            Controls.VehicleWheel.Brake.performed += BrakePerformed;
+            Controls.VehicleWheel.Brake.canceled += BrakeCanceled;
+            Controls.VehicleWheel.Steer.performed += SteerPerformed;
+            Controls.VehicleWheel.ButtonA.performed += ButtonA;
+            Controls.VehicleWheel.ButtonB.performed += ButtonB;
+            Controls.VehicleWheel.ButtonX.performed += ButtonX;
+            Controls.VehicleWheel.ButtonY.performed += ButtonY;
+            Controls.VehicleWheel.ButtonRB.performed += ButtonRB;
+            Controls.VehicleWheel.ButtonLB.performed += ButtonLB;
+            Controls.VehicleWheel.ButtonSelect.performed += ButtonSelect;
+            Controls.VehicleWheel.ButtonStart.performed += ButtonStart;
+            Controls.VehicleWheel.ButtonRSB.performed += ButtonRSB;
+            Controls.VehicleWheel.ButtonLSB.performed += ButtonLSB;
+            Controls.VehicleWheel.ButtonCenter.performed += ButtonCenter;
+            Controls.VehicleWheel.DPad.performed += DPad;
         }
 
         private void AccelPerformed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -155,20 +154,20 @@ namespace Simulator.Sensors
 
         private void ButtonRSB(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            actions.IncrementHeadLightState();
+            Actions.IncrementHeadLightState();
         }
 
         private void ButtonLSB(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (!AgentController.Active)
+            if (!Controller.Active)
                 return;
 
-            dynamics.ToggleReverse();
+            Dynamics.ToggleReverse();
         }
 
         private void ButtonCenter(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            actions.InteriorLight = !actions.InteriorLight;
+            Actions.InteriorLight = !Actions.InteriorLight;
         }
 
         private void DPad(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -194,7 +193,7 @@ namespace Simulator.Sensors
 
         private void Update()
         {
-            if (AgentController.Active)
+            if (Controller.Active)
             {
                 SteerInput = steer;
                 AccelInput = accel - brake;
@@ -207,23 +206,23 @@ namespace Simulator.Sensors
 
         private void OnDestroy()
         {
-            controls.VehicleWheel.Accel.performed -= AccelPerformed;
-            controls.VehicleWheel.Accel.canceled -= AccelCanceled;
-            controls.VehicleWheel.Brake.performed -= BrakePerformed;
-            controls.VehicleWheel.Brake.canceled -= BrakeCanceled;
-            controls.VehicleWheel.Steer.performed -= SteerPerformed;
-            controls.VehicleWheel.ButtonA.performed -= ButtonA;
-            controls.VehicleWheel.ButtonB.performed -= ButtonB;
-            controls.VehicleWheel.ButtonX.performed -= ButtonX;
-            controls.VehicleWheel.ButtonY.performed -= ButtonY;
-            controls.VehicleWheel.ButtonRB.performed -= ButtonRB;
-            controls.VehicleWheel.ButtonLB.performed -= ButtonLB;
-            controls.VehicleWheel.ButtonSelect.performed -= ButtonSelect;
-            controls.VehicleWheel.ButtonStart.performed -= ButtonStart;
-            controls.VehicleWheel.ButtonRSB.performed -= ButtonRSB;
-            controls.VehicleWheel.ButtonLSB.performed -= ButtonLSB;
-            controls.VehicleWheel.ButtonCenter.performed -= ButtonCenter;
-            controls.VehicleWheel.DPad.performed -= DPad;
+            Controls.VehicleWheel.Accel.performed -= AccelPerformed;
+            Controls.VehicleWheel.Accel.canceled -= AccelCanceled;
+            Controls.VehicleWheel.Brake.performed -= BrakePerformed;
+            Controls.VehicleWheel.Brake.canceled -= BrakeCanceled;
+            Controls.VehicleWheel.Steer.performed -= SteerPerformed;
+            Controls.VehicleWheel.ButtonA.performed -= ButtonA;
+            Controls.VehicleWheel.ButtonB.performed -= ButtonB;
+            Controls.VehicleWheel.ButtonX.performed -= ButtonX;
+            Controls.VehicleWheel.ButtonY.performed -= ButtonY;
+            Controls.VehicleWheel.ButtonRB.performed -= ButtonRB;
+            Controls.VehicleWheel.ButtonLB.performed -= ButtonLB;
+            Controls.VehicleWheel.ButtonSelect.performed -= ButtonSelect;
+            Controls.VehicleWheel.ButtonStart.performed -= ButtonStart;
+            Controls.VehicleWheel.ButtonRSB.performed -= ButtonRSB;
+            Controls.VehicleWheel.ButtonLSB.performed -= ButtonLSB;
+            Controls.VehicleWheel.ButtonCenter.performed -= ButtonCenter;
+            Controls.VehicleWheel.DPad.performed -= DPad;
         }
 
         public override void OnBridgeSetup(BridgeInstance bridge)
@@ -239,13 +238,13 @@ namespace Simulator.Sensors
                 {"Accel", accel},
                 {"Steer", steer},
                 {"Brake", brake},
-                {"Speed", dynamics.RB.velocity.magnitude},
-                {"Hand Brake", dynamics.HandBrake},
-                {"Ignition", dynamics.CurrentIgnitionStatus},
-                {"Reverse", dynamics.Reverse},
-                {"Gear", dynamics.CurrentGear},
-                {"RPM", dynamics.CurrentRPM},
-                {"Velocity", dynamics.RB.velocity}
+                {"Speed", Dynamics.Velocity.magnitude},
+                {"Hand Brake", Dynamics.HandBrake},
+                {"Ignition", Dynamics.CurrentIgnitionStatus},
+                {"Reverse", Dynamics.Reverse},
+                {"Gear", Dynamics.CurrentGear},
+                {"RPM", Dynamics.CurrentRPM},
+                {"Velocity", Dynamics.Velocity}
             };
             visualizer.UpdateGraphValues(graphData);
         }
