@@ -42,7 +42,7 @@ namespace Simulator.Sensors
             operatingSystemFamily = SystemInfo.operatingSystemFamily;
         }
 
-        private void Start()
+        protected override void Initialize()
         {
             Controller = GetComponentInParent<IAgentController>();
             Dynamics = GetComponentInParent<IVehicleDynamics>();
@@ -70,6 +70,27 @@ namespace Simulator.Sensors
             Controls.VehicleWheel.ButtonLSB.performed += ButtonLSB;
             Controls.VehicleWheel.ButtonCenter.performed += ButtonCenter;
             Controls.VehicleWheel.DPad.performed += DPad;
+        }
+
+        protected override void Deinitialize()
+        {
+            Controls.VehicleWheel.Accel.performed -= AccelPerformed;
+            Controls.VehicleWheel.Accel.canceled -= AccelCanceled;
+            Controls.VehicleWheel.Brake.performed -= BrakePerformed;
+            Controls.VehicleWheel.Brake.canceled -= BrakeCanceled;
+            Controls.VehicleWheel.Steer.performed -= SteerPerformed;
+            Controls.VehicleWheel.ButtonA.performed -= ButtonA;
+            Controls.VehicleWheel.ButtonB.performed -= ButtonB;
+            Controls.VehicleWheel.ButtonX.performed -= ButtonX;
+            Controls.VehicleWheel.ButtonY.performed -= ButtonY;
+            Controls.VehicleWheel.ButtonRB.performed -= ButtonRB;
+            Controls.VehicleWheel.ButtonLB.performed -= ButtonLB;
+            Controls.VehicleWheel.ButtonSelect.performed -= ButtonSelect;
+            Controls.VehicleWheel.ButtonStart.performed -= ButtonStart;
+            Controls.VehicleWheel.ButtonRSB.performed -= ButtonRSB;
+            Controls.VehicleWheel.ButtonLSB.performed -= ButtonLSB;
+            Controls.VehicleWheel.ButtonCenter.performed -= ButtonCenter;
+            Controls.VehicleWheel.DPad.performed -= DPad;
         }
 
         private void AccelPerformed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -202,27 +223,6 @@ namespace Simulator.Sensors
                 MaxAccel = Mathf.Max(MaxAccel, Mathf.Sign(accel) * accel);
                 MaxBrake = Mathf.Max(MaxBrake, Mathf.Sign(brake) * brake);
             }
-        }
-
-        private void OnDestroy()
-        {
-            Controls.VehicleWheel.Accel.performed -= AccelPerformed;
-            Controls.VehicleWheel.Accel.canceled -= AccelCanceled;
-            Controls.VehicleWheel.Brake.performed -= BrakePerformed;
-            Controls.VehicleWheel.Brake.canceled -= BrakeCanceled;
-            Controls.VehicleWheel.Steer.performed -= SteerPerformed;
-            Controls.VehicleWheel.ButtonA.performed -= ButtonA;
-            Controls.VehicleWheel.ButtonB.performed -= ButtonB;
-            Controls.VehicleWheel.ButtonX.performed -= ButtonX;
-            Controls.VehicleWheel.ButtonY.performed -= ButtonY;
-            Controls.VehicleWheel.ButtonRB.performed -= ButtonRB;
-            Controls.VehicleWheel.ButtonLB.performed -= ButtonLB;
-            Controls.VehicleWheel.ButtonSelect.performed -= ButtonSelect;
-            Controls.VehicleWheel.ButtonStart.performed -= ButtonStart;
-            Controls.VehicleWheel.ButtonRSB.performed -= ButtonRSB;
-            Controls.VehicleWheel.ButtonLSB.performed -= ButtonLSB;
-            Controls.VehicleWheel.ButtonCenter.performed -= ButtonCenter;
-            Controls.VehicleWheel.DPad.performed -= DPad;
         }
 
         public override void OnBridgeSetup(BridgeInstance bridge)
