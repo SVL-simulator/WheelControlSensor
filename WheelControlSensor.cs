@@ -49,7 +49,6 @@ namespace Simulator.Sensors
             Actions = GetComponentInParent<VehicleActions>();
 
             Debug.Assert(Dynamics != null);
-            Debug.Assert(Actions != null);
             Debug.Assert(SimulatorManager.Instance != null);
 
             Controls = SimulatorManager.Instance.controls;
@@ -175,6 +174,9 @@ namespace Simulator.Sensors
 
         private void ButtonRSB(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            if (Actions == null)
+                return;
+
             Actions.IncrementHeadLightState();
         }
 
@@ -188,6 +190,9 @@ namespace Simulator.Sensors
 
         private void ButtonCenter(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            if (Actions == null)
+                return;
+
             Actions.InteriorLight = !Actions.InteriorLight;
         }
 
