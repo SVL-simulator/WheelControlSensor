@@ -29,8 +29,8 @@ namespace Simulator.Sensors
         public float MaxAccel = 0f;
         [AnalysisMeasurement(MeasurementType.Input)]
         public float MaxBrake = 0f;
-
-        private SimulatorControls Controls;
+                
+        private WheelControlSensorInput Controls;
         private IVehicleDynamics Dynamics;
         private VehicleActions Actions;
         private IAgentController Controller;
@@ -51,7 +51,8 @@ namespace Simulator.Sensors
             Debug.Assert(Dynamics != null);
             Debug.Assert(SimulatorManager.Instance != null);
 
-            Controls = SimulatorManager.Instance.controls;
+            Controls = new WheelControlSensorInput();
+            
             Controls.VehicleWheel.Accel.performed += AccelPerformed;
             Controls.VehicleWheel.Accel.canceled += AccelCanceled;
             Controls.VehicleWheel.Brake.performed += BrakePerformed;
@@ -69,27 +70,19 @@ namespace Simulator.Sensors
             Controls.VehicleWheel.ButtonLSB.performed += ButtonLSB;
             Controls.VehicleWheel.ButtonCenter.performed += ButtonCenter;
             Controls.VehicleWheel.DPad.performed += DPad;
+
+            Controls.Enable();
         }
 
         protected override void Deinitialize()
         {
-            Controls.VehicleWheel.Accel.performed -= AccelPerformed;
-            Controls.VehicleWheel.Accel.canceled -= AccelCanceled;
-            Controls.VehicleWheel.Brake.performed -= BrakePerformed;
-            Controls.VehicleWheel.Brake.canceled -= BrakeCanceled;
-            Controls.VehicleWheel.Steer.performed -= SteerPerformed;
-            Controls.VehicleWheel.ButtonA.performed -= ButtonA;
-            Controls.VehicleWheel.ButtonB.performed -= ButtonB;
-            Controls.VehicleWheel.ButtonX.performed -= ButtonX;
-            Controls.VehicleWheel.ButtonY.performed -= ButtonY;
-            Controls.VehicleWheel.ButtonRB.performed -= ButtonRB;
-            Controls.VehicleWheel.ButtonLB.performed -= ButtonLB;
-            Controls.VehicleWheel.ButtonSelect.performed -= ButtonSelect;
-            Controls.VehicleWheel.ButtonStart.performed -= ButtonStart;
-            Controls.VehicleWheel.ButtonRSB.performed -= ButtonRSB;
-            Controls.VehicleWheel.ButtonLSB.performed -= ButtonLSB;
-            Controls.VehicleWheel.ButtonCenter.performed -= ButtonCenter;
-            Controls.VehicleWheel.DPad.performed -= DPad;
+            if (Controls != null)
+            {                
+                Controls.Disable();
+                Controls.Dispose();
+
+                Controls = null;
+            }
         }
 
         private void AccelPerformed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
